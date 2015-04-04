@@ -3,13 +3,13 @@
     <title></title>
     <link rel="stylesheet" type="text/css" href="built/main.css">
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-    <script src="built/models.js"></script>
 </head>
 <body>
     <div>
         <h1>Hello world</h1>
     </div>
-    <div class="board">
+    <div id="board"></div>
+    <div id="boardColorRef" class="board">
         <div class="row">
             <span class="cell tile b-dgreen" id="cell-1-1"></span>
             <span class="cell tile b-orange" id="cell-1-2"></span>
@@ -26,6 +26,9 @@
             <span class="cell tile b-orange" id="cell-3-3"></span>
         </div>
     </div>
+    <script src="built/react-with-addons.min.js"></script>
+    <script src="built/models.js"></script>
+    <script src="built/index.js"></script>
     <script type="text/javascript">
         var board = new Board(3, 500, 400);
 
