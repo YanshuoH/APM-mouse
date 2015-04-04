@@ -4,9 +4,10 @@
  * Constructor of Board.prototype.object
  * @param integer    size size of Board.prototype.grid
  * @param integer    lifeTime life time for a tile (ms)
+ * @param integer    interval of generating new tile (ms)
  *
  */
-var Board = function (size, lifeTime) {
+var Board = function (size, lifeTime, interval) {
   this.cells = [];
   // Init grid
   var i, j;
@@ -21,9 +22,13 @@ var Board = function (size, lifeTime) {
 
   this.size = size;
   this.lifeTime = lifeTime;
+  this.interval = interval;
   this.startTime = Date.now();
   this.clickTimes = 0;
   this.effectiveClickTimes = 0;
+
+  // the start interval, for stop handling
+  this.executing = null;
   this.end = false;
 };
 
@@ -39,8 +44,8 @@ Board.prototype.addTile = function (x, y) {
     this.cells[x][y] = 1;
 
     var board = this;
-    setTimeout(function() {
-      board.checkCell(x, y);
+    setTimeout(function () {
+      board.clearCell(x, y);
     }, this.lifeTime);
 
     return true;
@@ -69,9 +74,9 @@ Board.prototype.addRandomTile = function () {
   var y = this.generateRandomeInteger(0, this.size - 1);
 
   var board = this;
-  var interval = setInterval(function() {
+  var retryInterval = setInterval(function () {
     if (board.addTile(x, y)) {
-      clearInterval(interval);
+      clearInterval(retryInterval);
     }
   }, 1);
 
@@ -86,5 +91,32 @@ Board.prototype.addRandomTile = function () {
 Board.prototype.checkCell = function (x, y) {
   if (this.cells[x][y] !== null) {
     this.end = true;
+  }
+};
+
+
+/**
+ * @param integer    x
+ * @param integer    y
+ *
+ */
+Board.prototype.clearCell = function (x, y) {
+  if (this.cells[x][y] !== null) {
+    this.cells[x][y] = null;
+  }
+};
+
+
+
+Board.prototype.start = function () {
+  var board = this;
+  this.executing = setInterval(function () {
+    board.addRandomTile();
+  }, board.interval);
+};
+
+Board.prototype.stop = function () {
+  if (this.executing !== null) {
+    clearInterval(this.executing);
   }
 };
