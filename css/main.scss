@@ -121,3 +121,45 @@ body{
   @extend b-color;
   background: rgba(0, 171, 169, 0.8);
 }
+
+.overlay {
+  position: absolute;
+  top: 57px;
+  width: 490px;
+  height: 490px;
+  background-color: rgba(221, 221, 221, 0.5);
+
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  font-size: 55px;
+  font-weight: bolder;
+}
+
+.overlay {
+  .message {
+    margin-top: 140px;
+    line-height: 2;
+  }
+
+  .startButton {
+    color: #fff;
+    height: 40px;
+    width: 200px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+  }
+}
