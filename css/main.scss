@@ -85,7 +85,7 @@ body{
 
 .b-red {
   @extend b-color;
-  background: #ff3738 !important;
+  background: #ff3738;
 }
 
 .b-red:hover {
@@ -101,4 +101,23 @@ body{
 .b-lblue:hover {
   @extend b-color;
   background: #1789c1;
+}
+
+.b-dgreen {
+  @extend b-color;
+  background: #128023;
+}
+
+.b-dgreen:hover {
+  background: rgba(18, 128, 35, 0.8);
+}
+
+.b-teal {
+  @extend b-color;
+  background: #00aba9;
+}
+
+.b-teal:hover {
+  @extend b-color;
+  background: rgba(0, 171, 169, 0.8);
 }
