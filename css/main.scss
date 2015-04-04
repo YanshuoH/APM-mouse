@@ -1,0 +1,104 @@
+body{
+  background:#333;
+  font-size:17px;
+  line-height:25px;
+  color:#fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align:center;
+}
+
+.board {
+  order: 1;
+  width: 490px;
+  height: 490px;
+  padding: 5px;
+  border-radius: 7px;
+  outline: none;
+  margin: auto;
+}
+
+.cell {
+  width: 150px;
+  height: 150px;
+  margin: 5px;
+  line-height: 90px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #181818;
+  cursor: pointer;
+}
+
+.tile {
+  width: 138px;
+  height: 138px;
+  padding: 5px;
+  background:#333;
+}
+
+.b-color {
+  -webkit-transition:background 1s ease;
+  -moz-transition:background 1s ease;
+  -o-transition:background 1s ease;
+  transition:background 1s ease;
+}
+
+.b-orange {
+  @extend b-color;
+  background: #fe781e;
+}
+
+.b-orange:hover {
+  @extend b-color;
+  background: #e66d1c;
+}
+
+.b-purple {
+  @extend b-color;
+  background: #9b59bb;
+}
+
+.b-purple:hover {
+  @extend b-color;
+  background: #81499c;
+}
+
+.b-blue {
+  @extend b-color;
+  background: #1570a6;
+}
+
+.b-blue:hover {
+  @extend b-color;
+  background: #11608f;
+}
+
+.b-green {
+  @extend b-color;
+  background: #41bb19;
+}
+
+.b-green:hover {
+  @extend b-color;
+  background: #379e15;
+}
+
+.b-red {
+  @extend b-color;
+  background: #ff3738 !important;
+}
+
+.b-red:hover {
+  @extend b-color;
+  background: #e33031;
+}
+
+.b-lblue {
+  @extend b-color;
+  background: #1ba1e2;
+}
+
+.b-lblue:hover {
+  @extend b-color;
+  background: #1789c1;
+}
