@@ -9,20 +9,30 @@ var BoardView = React.createClass({
 
   startGame: function (overlay) {
     this.setState({
-      board: this.state.board,
+      board: new Board(3, 1000, 2000),
+      totalClick: 0,
+      effectiveClick: 0,
       showOverlay: false
     });
   },
 
-  handleCellClickClick: function (cell) {
+  handleGameOver: function () {
+    this.props.endGame = true;
+    this.setState(this.getInitialState());
+  },
+
+  handleCellClickClick: function (cell, isEffective) {
     // TODO: statistics
+    this.setState({
+      totalClick: this.state.totalClick + 1,
+      effectiveClick: this.state.effectiveClick + (isEffective ? 1 : 0)
+    });
   },
 
   handleCellGenerate: function (cell) {
     // TODO: check if board's cells have all tiles
     if (this.state.board.checkCells()) {
-      this.props.endGame = true;
-      this.setState(this.getInitialState());
+      this.handleGameOver();
 
       // Stop cell interval
       return true;
@@ -47,6 +57,7 @@ var BoardView = React.createClass({
 
     return (
       <div className='board'>
+        <ScoreBox totalClick={this.state.totalClick} effectiveClick={this.state.effectiveClick} />
         {cells}
         <Overlay board={this.state.board} show={this.state.showOverlay} onStart={this.startGame} />
       </div>
@@ -62,16 +73,19 @@ var CellView = React.createClass({
 
   handleClick: function () {
       // Board callback function for global event handle
-      this.props.onCellClick(this);
-      this.state.tile.setHide();
-      this.setState({ tile: this.state.tile });
+      var isEffective = false;
+      if (this.state.tile.hasShown()) {
+        // Rendering renew cell class on updating the state
+        this.state.tile.setHide();
+        this.setState({ tile: this.state.tile });
+
+        isEffective = true;
+      }
+      this.props.onCellClick(this, isEffective);
   },
 
   // Core function for tiles generation and callbacks to board
   componentWillReceiveProps: function (oldProps, newProps) {
-    if (oldProps.endGame === true) {
-      return;
-    }
     var self = this;
     // Generate tiles by input interval of board
     self.props.intervalVariable = setInterval(function () {
@@ -92,6 +106,7 @@ var CellView = React.createClass({
 
   render: function () {
     var cs = React.addons.classSet;
+    console.log(this.state.tile);
     var classes = cs({
       'cell': true,
       'tile b-red': this.state.tile.hasShown() ? true : false
@@ -125,7 +140,19 @@ var Overlay = React.createClass({
         <p className='message'>{this.props.wording}</p>
         <button className="startButton b-lblue" onClick={this.handleClick}>{this.props.buttonWording}</button>
       </div>
-    )
+    );
+  }
+});
+
+var ScoreBox = React.createClass({
+  render: function () {
+    var percentage = this.props.effectiveClick / this.props.totalClick * 100;
+    percentage = percentage ? percentage.toFixed(2) : 0;
+    return <div>
+      <h1>APM: {this.props.totalClick}</h1>
+      <h1>EPM: {this.props.effectiveClick}</h1>
+      <h1>Percentage: {percentage} %</h1>
+    </div>
   }
 });
 

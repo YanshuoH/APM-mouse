@@ -9,7 +9,7 @@
         <h1>Hello world</h1>
     </div>
     <div id="board"></div>
-    <div id="boardColorRef" class="board">
+    <div id="boardColorRef" class="board" style="display: none;">
         <div class="row">
             <span class="cell tile b-dgreen" id="cell-1-1"></span>
             <span class="cell tile b-orange" id="cell-1-2"></span>
@@ -29,23 +29,5 @@
     <script src="http://fb.me/react-with-addons-0.13.1.js"></script>
     <script src="built/models.js"></script>
     <script src="built/index.js"></script>
-    <script type="text/javascript">
-        var board = new Board(3, 500, 400);
-
-        var writeTable = function(board) {
-            for (var i = 0; i < 3; i++) {
-                for (var j = 0; j < 3; j++) {
-                    $('#cell-' + (i+1) + '-' + (j+1)).text(board.cells[i][j]);
-                    
-                }
-            }
-        }
-
-        setInterval(function() {
-            writeTable(board);
-        }, 500);
-
-        window.board = board;
-    </script>
 </body>
 </html>
