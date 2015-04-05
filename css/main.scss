@@ -1,3 +1,5 @@
+@import 'reset';
+
 body{
   background:#333;
   font-size:17px;
@@ -15,6 +17,10 @@ body{
   border-radius: 7px;
   outline: none;
   margin: auto;
+}
+
+.board .row.first-row {
+
 }
 
 .cell {
@@ -36,7 +42,7 @@ body{
   background:#333;
 }
 
-.b-color {
+b-color {
   -webkit-transition:background 1s ease;
   -moz-transition:background 1s ease;
   -o-transition:background 1s ease;
@@ -124,7 +130,7 @@ body{
 
 .overlay {
   position: absolute;
-  top: 57px;
+  top: 230px;
   width: 490px;
   height: 490px;
   background-color: rgba(221, 221, 221, 0.5);
@@ -173,4 +179,27 @@ body{
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s 0.3s, opacity 0.3s linear;
+}
+
+.score-box {
+  height: 175px;
+}
+
+.score-box .c100:first-child {
+  margin-left: 47px;
+}
+
+.c100.dark > span {
+  color: inherit;
+}
+
+.c100 span.type {
+  @extend reset-this;
+  bottom: -31px;
+  left: 44px;
+  position: absolute;
+}
+
+.c100 span.type.Percentage {
+  left: 22px;
 }
