@@ -4,7 +4,7 @@ var BoardView = React.createClass({
     return {
       board: new Board(3, 1000, 2000),
       showOverlay: true,
-      endGame: false
+      endGame: true
     };
   },
 
@@ -14,12 +14,13 @@ var BoardView = React.createClass({
       totalClick: 0,
       effectiveClick: 0,
       showOverlay: false,
-      startGame: true
+      startGame: true,
+      endGame: false
     });
   },
 
   handleGameOver: function () {
-    this.state.endGame = true;
+    console.log('game over');
     this.setState(this.getInitialState());
   },
 
@@ -43,8 +44,12 @@ var BoardView = React.createClass({
 
   render: function () {
     var self = this;
-    var cells = self.state.board.cells.map(function (row) {
-      return (<div className='row'>
+    var cells = self.state.board.cells.map(function (row, index) {
+      var className = 'row';
+      if (index == 0) {
+        className += ' first-row';
+      }
+      return (<div className={className}>
         {
           row.map(function (col) {
             return <CellView
@@ -93,6 +98,7 @@ var CellView = React.createClass({
     self.state.intervalVariable = setInterval(function () {
 
       // Callback function in board, check if the game is over
+      // Game Ends HERE
       if (self.props.onCellGenerate(self.props.tile)) {
         // Shitty loop to clear all interval...sorry about that
         for (var i = 1; i < 99999; i++) {
@@ -114,13 +120,13 @@ var CellView = React.createClass({
   render: function () {
     if (this.props.startGame) {
       this.handleLifeCycle();
-    } else {
-      // initial empty cell from board
-      this.state.tile = this.props.tile;
+    }
+
+    if (this.props.endGame) {
+      this.state.tile.setHide();
     }
 
     var cs = React.addons.classSet;
-    console.log('rendering');
     var classes = cs({
       'cell': true,
       'tile b-red': this.state.tile.hasShown() ? true : false
@@ -161,13 +167,33 @@ var Overlay = React.createClass({
 var ScoreBox = React.createClass({
   render: function () {
     var percentage = this.props.effectiveClick / this.props.totalClick * 100;
-    percentage = percentage ? percentage.toFixed(2) : 0;
-    return <div>
-      <h1>APM: {this.props.totalClick}</h1>
-      <h1>EPM: {this.props.effectiveClick}</h1>
-      <h1>Percentage: {percentage} %</h1>
+    percentage = percentage ? Math.round(percentage) : 0;
+    var totalClick = this.props.totalClick === undefined ? 0 : this.props.totalClick;
+    var effectiveClick = this.props.effectiveClick === undefined ? 0 : this.props.effectiveClick;
+
+    return <div className='score-box'>
+      <ScoreCircle percentage={percentage} number={effectiveClick} type={'EPM'} />
+      <ScoreCircle percentage={percentage} number={totalClick} type={'APM'} />
+      <ScoreCircle percentage={percentage} number={percentage} type={'Percentage'} />
     </div>
   }
+});
+
+var ScoreCircle = React.createClass({
+  render: function () {
+    var cs = React.addons.classSet;
+    var className = 'c100 dark ' + 'p' + this.props.percentage;
+    var typeClassName = 'type ' + this.props.type;
+    return <div className={className}>
+      <span>{this.props.number}</span>
+      <div className='slice'>
+        <div className='bar'></div>
+        <div className='fill'></div>
+      </div>
+      <span className={typeClassName}>{this.props.type}</span>
+    </div>
+  }
+
 });
 
 React.render(<BoardView />, document.getElementById('board'));
