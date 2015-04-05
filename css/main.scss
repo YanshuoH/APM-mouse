@@ -203,3 +203,44 @@ b-color {
 .c100 span.type.Percentage {
   left: 22px;
 }
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  background-color: #3D3D3D;
+  float: left;
+}
+
+.sidebar {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul li {
+    display: block;
+    border: 0;
+    border-bottom: 1px #5c5c5c solid;
+    position: relative;
+  }
+
+  ul li a {
+    display: block;
+    position: relative;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #eeeeee;
+    background-color: #3D3D3D;
+  }
+
+  ul li.active a {
+    background-color: #9a1616;
+    color: #ffffff;
+  }
+
+  ul li a:hover {
+    background-color: #262626;
+    color: #ffffff;
+  }
+}
