@@ -5,6 +5,27 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+var WrapperView = React.createClass({
+  render: function () {
+    return <div>
+      <BoardView />
+      <NavView />
+    </div>
+  }
+})
+
+var NavView = React.createClass({
+  render: function() {
+    var difficulties = ['normal', 'hard', 'wtf?'];
+    var options = difficulties.map(function (difficulty) {
+      return <li><a href='#'>{difficulty}</a></li>;
+    });
+
+    return (<nav className="sidebar"><ul>{options}</ul></nav>);
+
+  }
+})
+
 var BoardView = React.createClass({
   getInitialState: function (isFirst, duration) {
     var initialState = {
@@ -230,4 +251,4 @@ var ScoreCircle = React.createClass({
 
 });
 
-React.render(<BoardView />, document.getElementById('board'));
+React.render(<WrapperView />, document.getElementById('board'));
