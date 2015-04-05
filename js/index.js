@@ -183,9 +183,22 @@ var ScoreCircle = React.createClass({
   render: function () {
     var cs = React.addons.classSet;
     var className = 'c100 dark ' + 'p' + this.props.percentage;
+    // a little bit more concat of class
+    if (this.props.percentage > 60) {
+      className += ' green';
+    } else if (this.props.percentage <= 70 && this.props.percentage > 45) {
+      // will do nothing
+    } else {
+      className += ' orange';
+    }
+
     var typeClassName = 'type ' + this.props.type;
+    var number = this.props.number;
+    if (this.props.type === 'Percentage') {
+      number += '%'
+    }
     return <div className={className}>
-      <span>{this.props.number}</span>
+      <span>{number}</span>
       <div className='slice'>
         <div className='bar'></div>
         <div className='fill'></div>
