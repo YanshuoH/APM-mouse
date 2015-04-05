@@ -165,9 +165,7 @@ body {
   outline: none;
   margin: auto; }
 
-.cell {
-  width: 150px;
-  height: 150px;
+.cell, .size-3 .cell, .size-4 .cell, .size-5 .cell {
   margin: 5px;
   line-height: 90px;
   display: inline-block;
@@ -175,6 +173,18 @@ body {
   vertical-align: middle;
   background-color: #181818;
   cursor: pointer; }
+
+.size-3 .cell {
+  width: 150px;
+  height: 150px; }
+
+.size-4 .cell {
+  width: 110px;
+  height: 110px; }
+
+.size-5 .cell {
+  width: 88px;
+  height: 88px; }
 
 .tile {
   width: 138px;
@@ -297,3 +307,32 @@ b-color, .b-orange, .b-orange:hover, .b-purple, .b-purple:hover, .b-blue, .b-blu
 
 .c100 span.type.Percentage {
   left: 22px; }
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  background-color: #3D3D3D;
+  float: left; }
+
+.sidebar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+.sidebar ul li {
+  display: block;
+  border: 0;
+  border-bottom: 1px #5c5c5c solid;
+  position: relative; }
+.sidebar ul li a {
+  display: block;
+  position: relative;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #eeeeee;
+  background-color: #3D3D3D; }
+.sidebar ul li.active a {
+  background-color: #9a1616;
+  color: #ffffff; }
+.sidebar ul li a:hover {
+  background-color: #262626;
+  color: #ffffff; }

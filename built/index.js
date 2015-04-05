@@ -1,27 +1,91 @@
 /** @jsx React.DOM */
-var BoardView = React.createClass({displayName: "BoardView",
+var supportedColors = ['b-orange', 'b-purple', 'b-blue', 'b-green', 'b-red', 'b-lblue', 'b-dgreen', 'b-teal'];
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var WrapperView = React.createClass({displayName: "WrapperView",
   getInitialState: function () {
     return {
+      difficulty: 'wtf?'
+    }
+  },
+  getDifficultySets: function() {
+    return {
+      'normal': {
+        size: 5,
+        interval: 3000
+      },
+      'hard': {
+        size: 4,
+        interval: 2500
+      },
+      'wtf?': {
+        size: 3,
+        interval: 2000
+      }
+    }
+  },
+  handleDifficultyClick: function (difficulty) {
+    this.setState({ difficulty: difficulty });
+  },
+  render: function () {
+    var difficulty = this.state.difficulty;
+    var difficultySets = this.getDifficultySets()[difficulty];
+
+    return React.createElement("div", null, 
+      React.createElement(BoardView, {difficulty: difficultySets}), 
+      React.createElement(NavView, {difficulty: difficulty, onClick: this.handleDifficultyClick})
+    )
+  }
+})
+
+var NavView = React.createClass({displayName: "NavView",
+  render: function () {
+    var self = this;
+    var difficulties = ['normal', 'hard', 'wtf?'];
+
+    var options = difficulties.map(function (difficulty) {
+      var classes = difficulty === self.props.difficulty ? 'active' : '';
+      return React.createElement("li", {className: classes}, React.createElement("a", {href: "#", onClick: self.props.onClick.bind(this, difficulty), key: difficulty}, difficulty));
+    });
+
+    return (React.createElement("nav", {className: "sidebar"}, React.createElement("ul", null, options)));
+
+  }
+})
+
+var BoardView = React.createClass({displayName: "BoardView",
+  getInitialState: function (isFirst, duration) {
+    var initialState = {
       board: new Board(3, 1000, 2000),
       showOverlay: true,
-      endGame: true
+      endGame: true,
+      startTime: Date.now()
     };
+    if (isFirst !== undefined && isFirst === false) {
+      initialState.isFirst = false;
+      initialState.duration = duration;
+    }
+    return initialState;
   },
 
   startGame: function (overlay) {
     this.setState({
-      board: new Board(3, 1000, 2000),
+      board: new Board(this.props.difficulty.size, 1000, this.props.difficulty.interval),
       totalClick: 0,
       effectiveClick: 0,
       showOverlay: false,
       startGame: true,
+      startTime: Date.now(),
       endGame: false
     });
   },
 
   handleGameOver: function () {
-    console.log('game over');
-    this.setState(this.getInitialState());
+    var duration = Math.round((Date.now() - this.state.startTime) / 1000);
+    this.setState(this.getInitialState(false, duration));
   },
 
   handleCellClickClick: function (cell, isEffective) {
@@ -44,6 +108,10 @@ var BoardView = React.createClass({displayName: "BoardView",
 
   render: function () {
     var self = this;
+    var difficulty = this.props.difficulty;
+
+    self.state.board = new Board(difficulty.size, 1000, difficulty.interval);
+
     var cells = self.state.board.cells.map(function (row, index) {
       var className = 'row';
       if (index == 0) {
@@ -63,11 +131,14 @@ var BoardView = React.createClass({displayName: "BoardView",
       ));
     });
 
+    var sizeClassName = 'board';
+    sizeClassName += ' size-' + this.props.difficulty.size;
+
     return (
-      React.createElement("div", {className: "board"}, 
+      React.createElement("div", {className: sizeClassName}, 
         React.createElement(ScoreBox, {totalClick: this.state.totalClick, effectiveClick: this.state.effectiveClick}), 
         cells, 
-        React.createElement(Overlay, {board: this.state.board, show: this.state.showOverlay, onStart: this.startGame})
+        React.createElement(Overlay, {boardState: this.state, show: this.state.showOverlay, onStart: this.startGame})
       )
     );
   }
@@ -126,11 +197,12 @@ var CellView = React.createClass({displayName: "CellView",
       this.state.tile.setHide();
     }
 
-    var cs = React.addons.classSet;
-    var classes = cs({
-      'cell': true,
-      'tile b-red': this.state.tile.hasShown() ? true : false
-    });
+
+    var classes = 'cell '
+    if (this.state.tile.hasShown()) {
+      classes += 'tile ' + supportedColors[getRandomInt(0, supportedColors.length - 1)];
+    }
+
     return (
       React.createElement("span", {className: classes, onClick: this.handleClick}, '')
     );
@@ -145,11 +217,17 @@ var Overlay = React.createClass({displayName: "Overlay",
   },
   render: function () {
     var cs = React.addons.classSet;
-    var board = this.props.board;
+    var boardState = this.props.boardState;
     // TODO: is first start of already end
-    this.props.buttonWording = 'Start';
-    this.props.wording = 'GO GO GO';
+      var buttonWording = 'Start';
+      var wording = 'Let\'s do it';
+      var buttonClass = 'startButton b-lblue';
 
+    if (boardState.isFirst !== undefined && boardState.isFirst === false) {
+      wording = 'Time: ' + boardState.duration + 's';
+      buttonWording = 'Retry';
+      buttonClass = 'startButton b-green';
+    }
     var classes = cs({
       'overlay': true,
       'visible': this.props.show,
@@ -157,8 +235,8 @@ var Overlay = React.createClass({displayName: "Overlay",
     });
     return (
       React.createElement("div", {className: classes}, 
-        React.createElement("p", {className: "message"}, this.props.wording), 
-        React.createElement("button", {className: "startButton b-lblue", onClick: this.handleClick}, this.props.buttonWording)
+        React.createElement("p", {className: "message"}, wording), 
+        React.createElement("button", {className: buttonClass, onClick: this.handleClick}, buttonWording)
       )
     );
   }
@@ -183,9 +261,22 @@ var ScoreCircle = React.createClass({displayName: "ScoreCircle",
   render: function () {
     var cs = React.addons.classSet;
     var className = 'c100 dark ' + 'p' + this.props.percentage;
+    // a little bit more concat of class
+    if (this.props.percentage > 60) {
+      className += ' green';
+    } else if (this.props.percentage <= 70 && this.props.percentage > 45) {
+      // will do nothing
+    } else {
+      className += ' orange';
+    }
+
     var typeClassName = 'type ' + this.props.type;
+    var number = this.props.number;
+    if (this.props.type === 'Percentage') {
+      number += '%'
+    }
     return React.createElement("div", {className: className}, 
-      React.createElement("span", null, this.props.number), 
+      React.createElement("span", null, number), 
       React.createElement("div", {className: "slice"}, 
         React.createElement("div", {className: "bar"}), 
         React.createElement("div", {className: "fill"})
@@ -196,4 +287,4 @@ var ScoreCircle = React.createClass({displayName: "ScoreCircle",
 
 });
 
-React.render(React.createElement(BoardView, null), document.getElementById('board'));
+React.render(React.createElement(WrapperView, null), document.getElementById('board'));
