@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var react = require('gulp-react');
 
-var styles = 'css/*.scss';
+var styles = 'css/main.scss';
 var models = 'js/*.js';
 
 gulp.task('styles', function () {
