@@ -1,5 +1,27 @@
 // Game models
 
+var Cell = function (lifeTime, interval) {
+  this.lifeTime = lifeTime;
+  this.interval = interval;
+  this.show = false;
+}
+
+Cell.prototype.getRandomBoolean = function () {
+   return Math.random() >= 0.5;
+}
+
+Cell.prototype.setShow = function () {
+  this.show = true;
+}
+
+Cell.prototype.setHide = function() {
+  this.show = false;
+}
+
+Cell.prototype.hasShown = function () {
+  return this.show ? true : false;
+}
+
 /**
  * Constructor of Board.prototype.object
  * @param integer    size size of Board.prototype.grid
@@ -8,6 +30,13 @@
  *
  */
 var Board = function (size, lifeTime, interval) {
+  this.size = size;
+  this.lifeTime = lifeTime;
+  this.interval = interval;
+  this.startTime = Date.now();
+  this.clickTimes = 0;
+  this.effectiveClickTimes = 0;
+
   this.cells = [];
   // Init grid
   var i, j;
@@ -16,107 +45,26 @@ var Board = function (size, lifeTime, interval) {
       if (this.cells[i] === undefined) {
         this.cells[i] = [];
       }
-      this.cells[i][j] = null;
+      this.cells[i][j] = new Cell(this.lifeTime, this.interval);
     }
   }
-
-  this.size = size;
-  this.lifeTime = lifeTime;
-  this.interval = interval;
-  this.startTime = Date.now();
-  this.clickTimes = 0;
-  this.effectiveClickTimes = 0;
 
   // the start interval, for stop handling
   this.executing = null;
   this.end = false;
 };
 
-/**
- * @param integer    x
- * @param integer    y
- *
- */
-Board.prototype.addTile = function (x, y) {
-  if (this.cells[x][y] === null) {
 
-    // Create a Tile in (x, y)
-    this.cells[x][y] = 1;
-
-    var board = this;
-    setTimeout(function () {
-      board.clearCell(x, y);
-    }, this.lifeTime);
-
-    return true;
-  }
-
-  return false;
-};
-
-/**
- * @param integer    min
- * @param integer    max
- *
- * @return integer
- */
-Board.prototype.generateRandomeInteger = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-/**
- * Add tile in random position
- *
- * @return integer
- */
-Board.prototype.addRandomTile = function () {
-  var x = this.generateRandomeInteger(0, this.size - 1);
-  var y = this.generateRandomeInteger(0, this.size - 1);
-
-  var board = this;
-  var retryInterval = setInterval(function () {
-    if (board.addTile(x, y)) {
-      clearInterval(retryInterval);
+Board.prototype.checkCells = function () {
+  var counter = 0;
+  for (var i = 0; i < this.size; i++) {
+    for (var j = 0; j < this.size; j++) {
+      if (this.cells[i][j].hasShown()) {
+        counter ++;
+      }
     }
-  }, 1);
-
-  return;
-};
-
-/**
- * @param integer    x
- * @param integer    y
- *
- */
-Board.prototype.checkCell = function (x, y) {
-  if (this.cells[x][y] !== null) {
-    this.end = true;
   }
-};
 
-
-/**
- * @param integer    x
- * @param integer    y
- *
- */
-Board.prototype.clearCell = function (x, y) {
-  if (this.cells[x][y] !== null) {
-    this.cells[x][y] = null;
-  }
-};
-
-
-
-Board.prototype.start = function () {
-  var board = this;
-  this.executing = setInterval(function () {
-    board.addRandomTile();
-  }, board.interval);
-};
-
-Board.prototype.stop = function () {
-  if (this.executing !== null) {
-    clearInterval(this.executing);
-  }
-};
+  this.end = counter >= this.size * this.size ? true : false;
+  return this.end;
+}
