@@ -15,11 +15,11 @@ var WrapperView = React.createClass({displayName: "WrapperView",
     return {
       'normal': {
         size: 5,
-        interval: 3000
+        interval: 2000
       },
       'hard': {
         size: 4,
-        interval: 2500
+        interval: 2000
       },
       'wtf?': {
         size: 3,
@@ -198,9 +198,9 @@ var CellView = React.createClass({displayName: "CellView",
     }
 
 
-    var classes = 'cell '
+    var classes = 'cell'
     if (this.state.tile.hasShown()) {
-      classes += 'tile ' + supportedColors[getRandomInt(0, supportedColors.length - 1)];
+      classes = 'tile ' + supportedColors[getRandomInt(0, supportedColors.length - 1)];
     }
 
     return (

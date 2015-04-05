@@ -6,19 +6,49 @@ function getRandomInt(min, max) {
 }
 
 var WrapperView = React.createClass({
+  getInitialState: function () {
+    return {
+      difficulty: 'wtf?'
+    }
+  },
+  getDifficultySets: function() {
+    return {
+      'normal': {
+        size: 5,
+        interval: 2000
+      },
+      'hard': {
+        size: 4,
+        interval: 2000
+      },
+      'wtf?': {
+        size: 3,
+        interval: 2000
+      }
+    }
+  },
+  handleDifficultyClick: function (difficulty) {
+    this.setState({ difficulty: difficulty });
+  },
   render: function () {
+    var difficulty = this.state.difficulty;
+    var difficultySets = this.getDifficultySets()[difficulty];
+
     return <div>
-      <BoardView />
-      <NavView />
+      <BoardView difficulty={difficultySets} />
+      <NavView difficulty={difficulty} onClick={this.handleDifficultyClick} />
     </div>
   }
 })
 
 var NavView = React.createClass({
-  render: function() {
+  render: function () {
+    var self = this;
     var difficulties = ['normal', 'hard', 'wtf?'];
+
     var options = difficulties.map(function (difficulty) {
-      return <li><a href='#'>{difficulty}</a></li>;
+      var classes = difficulty === self.props.difficulty ? 'active' : '';
+      return <li className={classes}><a href='#' onClick={self.props.onClick.bind(this, difficulty)} key={difficulty}>{difficulty}</a></li>;
     });
 
     return (<nav className="sidebar"><ul>{options}</ul></nav>);
@@ -43,7 +73,7 @@ var BoardView = React.createClass({
 
   startGame: function (overlay) {
     this.setState({
-      board: new Board(3, 1000, 2000),
+      board: new Board(this.props.difficulty.size, 1000, this.props.difficulty.interval),
       totalClick: 0,
       effectiveClick: 0,
       showOverlay: false,
@@ -54,7 +84,6 @@ var BoardView = React.createClass({
   },
 
   handleGameOver: function () {
-    console.log('game over');
     var duration = Math.round((Date.now() - this.state.startTime) / 1000);
     this.setState(this.getInitialState(false, duration));
   },
@@ -79,6 +108,10 @@ var BoardView = React.createClass({
 
   render: function () {
     var self = this;
+    var difficulty = this.props.difficulty;
+
+    self.state.board = new Board(difficulty.size, 1000, difficulty.interval);
+
     var cells = self.state.board.cells.map(function (row, index) {
       var className = 'row';
       if (index == 0) {
@@ -98,8 +131,11 @@ var BoardView = React.createClass({
       </div>);
     });
 
+    var sizeClassName = 'board';
+    sizeClassName += ' size-' + this.props.difficulty.size;
+
     return (
-      <div className='board'>
+      <div className={sizeClassName}>
         <ScoreBox totalClick={this.state.totalClick} effectiveClick={this.state.effectiveClick} />
         {cells}
         <Overlay boardState={this.state} show={this.state.showOverlay} onStart={this.startGame} />
@@ -162,9 +198,9 @@ var CellView = React.createClass({
     }
 
 
-    var classes = 'cell '
+    var classes = 'cell'
     if (this.state.tile.hasShown()) {
-      classes += 'tile ' + supportedColors[getRandomInt(0, supportedColors.length - 1)];
+      classes = 'tile ' + supportedColors[getRandomInt(0, supportedColors.length - 1)];
     }
 
     return (

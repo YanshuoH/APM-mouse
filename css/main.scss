@@ -23,23 +23,58 @@ body{
 
 }
 
-.cell {
-  width: 150px;
-  height: 150px;
+.cell-model {
   margin: 5px;
   line-height: 90px;
   display: inline-block;
   text-align: center;
   vertical-align: middle;
-  background-color: #181818;
   cursor: pointer;
 }
 
-.tile {
-  width: 138px;
-  height: 138px;
-  padding: 5px;
-  background:#333;
+.size-3 {
+  .cell {
+    @extend .cell-model;
+    width: 150px;
+    height: 150px;
+    background-color: #181818;
+  }
+
+  .tile {
+    @extend .cell-model;
+    width: 150px;
+    height: 150px;
+  }
+}
+
+.size-4 {
+  .cell {
+    @extend .cell-model;
+    width: 110px;
+    height: 110px;
+    background-color: #181818;
+  }
+
+  .tile {
+    @extend .cell-model;
+    width: 110px;
+    height: 110px;
+  }
+}
+
+.size-5 {
+  .cell {
+    @extend .cell-model;
+    width: 88px;
+    height: 88px;
+    background-color: #181818;
+  }
+
+  .tile {
+    @extend .cell-model;
+    width: 88px;
+    height: 88px;
+  }
 }
 
 b-color {
@@ -51,81 +86,81 @@ b-color {
 
 .b-orange {
   @extend b-color;
-  background: #fe781e;
+  background-color: #fe781e !important;
 }
 
 .b-orange:hover {
   @extend b-color;
-  background: #e66d1c;
+  background-color: #e66d1c !important;
 }
 
 .b-purple {
   @extend b-color;
-  background: #9b59bb;
+  background-color: #9b59bb;
 }
 
 .b-purple:hover {
   @extend b-color;
-  background: #81499c;
+  background-color: #81499c;
 }
 
 .b-blue {
   @extend b-color;
-  background: #1570a6;
+  background-color: #1570a6;
 }
 
 .b-blue:hover {
   @extend b-color;
-  background: #11608f;
+  background-color: #11608f;
 }
 
 .b-green {
   @extend b-color;
-  background: #41bb19;
+  background-color: #41bb19;
 }
 
 .b-green:hover {
   @extend b-color;
-  background: #379e15;
+  background-color: #379e15;
 }
 
 .b-red {
   @extend b-color;
-  background: #ff3738;
+  background-color: #ff3738;
 }
 
 .b-red:hover {
   @extend b-color;
-  background: #e33031;
+  background-color: #e33031;
 }
 
 .b-lblue {
   @extend b-color;
-  background: #1ba1e2;
+  background-color: #1ba1e2;
 }
 
 .b-lblue:hover {
   @extend b-color;
-  background: #1789c1;
+  background-color: #1789c1;
 }
 
 .b-dgreen {
   @extend b-color;
-  background: #128023;
+  background-color: #128023;
 }
 
 .b-dgreen:hover {
-  background: rgba(18, 128, 35, 0.8);
+  background-color: rgba(18, 128, 35, 0.8);
 }
 
 .b-teal {
   @extend b-color;
-  background: #00aba9;
+  background-color: #00aba9;
 }
 
 .b-teal:hover {
   @extend b-color;
-  background: rgba(0, 171, 169, 0.8);
+  background-color: rgba(0, 171, 169, 0.8);
 }
 
 .overlay {
