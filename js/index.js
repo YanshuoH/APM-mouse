@@ -1,4 +1,10 @@
 /** @jsx React.DOM */
+var supportedColors = ['b-orange', 'b-purple', 'b-blue', 'b-green', 'b-red', 'b-lblue', 'b-dgreen', 'b-teal'];
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 var BoardView = React.createClass({
   getInitialState: function (isFirst, duration) {
     var initialState = {
@@ -134,11 +140,12 @@ var CellView = React.createClass({
       this.state.tile.setHide();
     }
 
-    var cs = React.addons.classSet;
-    var classes = cs({
-      'cell': true,
-      'tile b-red': this.state.tile.hasShown() ? true : false
-    });
+
+    var classes = 'cell '
+    if (this.state.tile.hasShown()) {
+      classes += 'tile ' + supportedColors[getRandomInt(0, supportedColors.length - 1)];
+    }
+
     return (
       <span className={classes} onClick={this.handleClick}>{''}</span>
     );
