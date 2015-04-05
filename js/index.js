@@ -1,11 +1,17 @@
 /** @jsx React.DOM */
 var BoardView = React.createClass({
-  getInitialState: function () {
-    return {
+  getInitialState: function (isFirst, duration) {
+    var initialState = {
       board: new Board(3, 1000, 2000),
       showOverlay: true,
-      endGame: true
+      endGame: true,
+      startTime: Date.now()
     };
+    if (isFirst !== undefined && isFirst === false) {
+      initialState.isFirst = false;
+      initialState.duration = duration;
+    }
+    return initialState;
   },
 
   startGame: function (overlay) {
@@ -15,13 +21,15 @@ var BoardView = React.createClass({
       effectiveClick: 0,
       showOverlay: false,
       startGame: true,
+      startTime: Date.now(),
       endGame: false
     });
   },
 
   handleGameOver: function () {
     console.log('game over');
-    this.setState(this.getInitialState());
+    var duration = Math.round((Date.now() - this.state.startTime) / 1000);
+    this.setState(this.getInitialState(false, duration));
   },
 
   handleCellClickClick: function (cell, isEffective) {
@@ -67,7 +75,7 @@ var BoardView = React.createClass({
       <div className='board'>
         <ScoreBox totalClick={this.state.totalClick} effectiveClick={this.state.effectiveClick} />
         {cells}
-        <Overlay board={this.state.board} show={this.state.showOverlay} onStart={this.startGame} />
+        <Overlay boardState={this.state} show={this.state.showOverlay} onStart={this.startGame} />
       </div>
     );
   }
@@ -145,11 +153,17 @@ var Overlay = React.createClass({
   },
   render: function () {
     var cs = React.addons.classSet;
-    var board = this.props.board;
+    var boardState = this.props.boardState;
     // TODO: is first start of already end
-    this.props.buttonWording = 'Start';
-    this.props.wording = 'GO GO GO';
+      var buttonWording = 'Start';
+      var wording = 'Let\'s do it';
+      var buttonClass = 'startButton b-lblue';
 
+    if (boardState.isFirst !== undefined && boardState.isFirst === false) {
+      wording = 'Time: ' + boardState.duration + 's';
+      buttonWording = 'Retry';
+      buttonClass = 'startButton b-green';
+    }
     var classes = cs({
       'overlay': true,
       'visible': this.props.show,
@@ -157,8 +171,8 @@ var Overlay = React.createClass({
     });
     return (
       <div className={classes}>
-        <p className='message'>{this.props.wording}</p>
-        <button className="startButton b-lblue" onClick={this.handleClick}>{this.props.buttonWording}</button>
+        <p className='message'>{wording}</p>
+        <button className={buttonClass} onClick={this.handleClick}>{buttonWording}</button>
       </div>
     );
   }
