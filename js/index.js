@@ -3,7 +3,8 @@ var BoardView = React.createClass({
   getInitialState: function () {
     return {
       board: new Board(3, 1000, 2000),
-      showOverlay: true
+      showOverlay: true,
+      endGame: false
     };
   },
 
@@ -12,12 +13,13 @@ var BoardView = React.createClass({
       board: new Board(3, 1000, 2000),
       totalClick: 0,
       effectiveClick: 0,
-      showOverlay: false
+      showOverlay: false,
+      startGame: true
     });
   },
 
   handleGameOver: function () {
-    this.props.endGame = true;
+    this.state.endGame = true;
     this.setState(this.getInitialState());
   },
 
@@ -41,7 +43,7 @@ var BoardView = React.createClass({
 
   render: function () {
     var self = this;
-    var cells = this.state.board.cells.map(function (row) {
+    var cells = self.state.board.cells.map(function (row) {
       return (<div className='row'>
         {
           row.map(function (col) {
@@ -49,7 +51,8 @@ var BoardView = React.createClass({
               tile={col}
               onCellClick={self.handleCellClickClick}
               onCellGenerate={self.handleCellGenerate}
-              endGame={self.props.endGame} />;
+              startGame={self.state.startGame}
+              endGame={self.state.endGame} />;
           })
         }
       </div>);
@@ -70,7 +73,6 @@ var CellView = React.createClass({
   getInitialState: function () {
     return { tile: this.props.tile };
   },
-
   handleClick: function () {
       // Board callback function for global event handle
       var isEffective = false;
@@ -85,28 +87,40 @@ var CellView = React.createClass({
   },
 
   // Core function for tiles generation and callbacks to board
-  componentWillReceiveProps: function (oldProps, newProps) {
+  handleLifeCycle: function () {
     var self = this;
     // Generate tiles by input interval of board
-    self.props.intervalVariable = setInterval(function () {
-      // Random generation
-      if (oldProps.tile.getRandomBoolean()) {
-        // show tile and update the rendering
-        oldProps.tile.setShow();
-        self.setState({ tile: oldProps.tile });
+    self.state.intervalVariable = setInterval(function () {
 
-        // Callback function in board, check if the game is over
-        if (self.props.onCellGenerate(oldProps.tile)) {
-          clearInterval(self.props.intervalVariable);
-          console.log('game ends');
+      // Callback function in board, check if the game is over
+      if (self.props.onCellGenerate(self.props.tile)) {
+        // Shitty loop to clear all interval...sorry about that
+        for (var i = 1; i < 99999; i++) {
+          window.clearInterval(i);
         }
+        return;
       }
-    }, oldProps.tile.interval);
+
+      // Random generation in certain interval
+      if (self.props.tile.getRandomBoolean()) {
+        // show tile and update the rendering
+        self.props.tile.setShow();
+        self.setState({ tile: self.props.tile });
+      }
+    }, self.props.tile.interval);
+
   },
 
   render: function () {
+    if (this.props.startGame) {
+      this.handleLifeCycle();
+    } else {
+      // initial empty cell from board
+      this.state.tile = this.props.tile;
+    }
+
     var cs = React.addons.classSet;
-    console.log(this.state.tile);
+    console.log('rendering');
     var classes = cs({
       'cell': true,
       'tile b-red': this.state.tile.hasShown() ? true : false
