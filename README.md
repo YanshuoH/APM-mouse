@@ -31,3 +31,5 @@ IE 8 failed. (Seems like ReactJS does not like IE8)
 ## Todos
 * In comming responsive support for tablets.
 * and so on
+
+ISC Licence
