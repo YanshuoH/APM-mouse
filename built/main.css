@@ -156,6 +156,19 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-align: center; }
 
+h1.title {
+  margin-top: 2em; }
+
+.foot {
+  clear: both;
+  position: relative;
+  z-index: 10;
+  height: 3em;
+  top: 4em; }
+
+.foot .github {
+  margin-bottom: 40px; }
+
 .board {
   order: 1;
   width: 490px;
@@ -252,8 +265,8 @@ b-color, .b-orange, .b-orange:hover, .b-purple, .b-purple:hover, .b-blue, .b-blu
   background-color: rgba(0, 171, 169, 0.8); }
 
 .overlay {
-  position: absolute;
-  top: 231px;
+  position: relative;
+  margin-top: -664px;
   width: 490px;
   height: 490px;
   background-color: rgba(221, 221, 221, 0.5);
@@ -275,8 +288,14 @@ b-color, .b-orange, .b-orange:hover, .b-purple, .b-purple:hover, .b-blue, .b-blu
   font-weight: bolder; }
 
 .overlay .message {
-  margin-top: 140px;
+  margin-top: 30px;
   line-height: 2; }
+.overlay .sub-message {
+  top: 113px;
+  position: relative;
+  font-size: 20px;
+  margin-bottom: 5.9em;
+  margin-top: 9em; }
 .overlay .startButton {
   color: #fff;
   height: 40px;
