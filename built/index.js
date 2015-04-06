@@ -228,10 +228,13 @@ var Overlay = React.createClass({displayName: "Overlay",
 
     if (boardState.isFirst !== undefined && boardState.isFirst === false) {
       wording = 'Time: ' + boardState.duration + 's';
-      subWording = ((boardState.effectiveClick / boardState.duration).toFixed(2)) * 60 + ' EPM!';
+      console.log((boardState.effectiveClick / boardState.duration));
+      subWording = ((boardState.effectiveClick / boardState.duration) * 60).toFixed(2) + ' EPM - '
+      subWording += ((boardState.totalClick / boardState.duration) * 60).toFixed(2) + ' APM';
       buttonWording = 'Retry';
       buttonClass = 'startButton b-green';
     }
+
     var classes = cs({
       'overlay': true,
       'visible': this.props.show,
