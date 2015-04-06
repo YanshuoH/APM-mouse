@@ -221,13 +221,14 @@ var Overlay = React.createClass({
   render: function () {
     var cs = React.addons.classSet;
     var boardState = this.props.boardState;
-    // TODO: is first start of already end
       var buttonWording = 'Start';
       var wording = 'Let\'s do it';
+      var subWording = 'Ready ?';
       var buttonClass = 'startButton b-lblue';
 
     if (boardState.isFirst !== undefined && boardState.isFirst === false) {
       wording = 'Time: ' + boardState.duration + 's';
+      subWording = ((boardState.effectiveClick / boardState.duration).toFixed(2)) * 60 + ' EPM!';
       buttonWording = 'Retry';
       buttonClass = 'startButton b-green';
     }
@@ -238,6 +239,7 @@ var Overlay = React.createClass({
     });
     return (
       <div className={classes}>
+        <p className='sub-message'>{subWording}</p>
         <p className='message'>{wording}</p>
         <button className={buttonClass} onClick={this.handleClick}>{buttonWording}</button>
       </div>
