@@ -11,5 +11,31 @@
     "gulp-compass": "^2.0.4",
     "gulp-react": "3.0.*",
     "gulp-sass": "1.3.*"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/YanshuoH/APM-mouse/issues"
+  },
+  "homepage": "https://github.com/YanshuoH/APM-mouse",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.11",
+    "gulp-react": "^3.0.1",
+    "gulp-sass": "^1.3.3"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "keywords": [
+    "APM",
+    "EPM",
+    "startcraft",
+    "warcraft",
+    "github",
+    "reactjs",
+    "sass",
+    "mouse",
+    "gulp"
+  ],
+  "author": "Yanshuo HUANG <yanshuo.huang@gmail.com> (https://github.com/YanshuoH)",
+  "license": "ISC"
 }
