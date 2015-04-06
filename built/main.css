@@ -191,11 +191,11 @@ body {
 
 .size-5 .cell {
   width: 88px;
-  height: 88px;
+  height: 86px;
   background-color: #181818; }
 .size-5 .tile {
   width: 88px;
-  height: 88px; }
+  height: 86px; }
 
 b-color, .b-orange, .b-orange:hover, .b-purple, .b-purple:hover, .b-blue, .b-blue:hover, .b-green, .b-green:hover, .b-red, .b-red:hover, .b-lblue, .b-lblue:hover, .b-dgreen, .b-teal, .b-teal:hover {
   -webkit-transition: background 1s ease;
@@ -253,7 +253,7 @@ b-color, .b-orange, .b-orange:hover, .b-purple, .b-purple:hover, .b-blue, .b-blu
 
 .overlay {
   position: absolute;
-  top: 230px;
+  top: 231px;
   width: 490px;
   height: 490px;
   background-color: rgba(221, 221, 221, 0.5);
@@ -312,6 +312,12 @@ b-color, .b-orange, .b-orange:hover, .b-purple, .b-purple:hover, .b-blue, .b-blu
 
 .c100 span.type.Percentage {
   left: 22px; }
+
+.c100 span.type.Effective-Clicks {
+  left: 6px; }
+
+.c100 span.type.Clicks {
+  left: 39px; }
 
 .sidebar {
   margin: 0;
