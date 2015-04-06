@@ -4,6 +4,12 @@ Ever heard of APM (actions per minute) and EPM (effective actions per minute) in
 
 For the good old times's sake, here's some practice in seconds
 
+Enjoy: http://yanshuoh.github.io/APM-mouse/
+
+## Downloads
+* Available in npm: npm install APM-mouse
+* git clone: https://github.com/YanshuoH/APM-mouse.git
+
 ## Modules
 This is a self-training project, built with ReactJS, Sass and Gulp.
 
