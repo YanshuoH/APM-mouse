@@ -94,10 +94,10 @@ h1.title {
 }
 
 b-color {
-  -webkit-transition:background 1s ease;
-  -moz-transition:background 1s ease;
-  -o-transition:background 1s ease;
-  transition:background 1s ease;
+  -webkit-transition:background 0.3s ease-in;
+  -moz-transition:background 0.3s ease-in;
+  -o-transition:background 0.3s ease-in;
+  transition:background 0.3s ease-in;
 }
 
 .b-orange {
