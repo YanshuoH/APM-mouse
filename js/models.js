@@ -1,13 +1,14 @@
 // Game models
 
-var Cell = function (lifeTime, interval) {
-  this.lifeTime = lifeTime;
+var Cell = function (propability, interval) {
+  this.propability = propability;
   this.interval = interval;
   this.show = false;
 }
 
 Cell.prototype.getRandomBoolean = function () {
-   return Math.random() >= 0.5;
+  console.log(this.propability);
+   return Math.random() >= this.propability;
 }
 
 Cell.prototype.setShow = function () {
@@ -22,16 +23,25 @@ Cell.prototype.hasShown = function () {
   return this.show ? true : false;
 }
 
+Cell.prototype.getRandomInterval = function () {
+  return this.interval + getRandomInt(0, this.interval);
+}
+
+// Duplicated random function, keep independency of models
+Cell.prototype.getRandomInt = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 /**
  * Constructor of Board.prototype.object
  * @param integer    size size of Board.prototype.grid
- * @param integer    lifeTime life time for a tile (ms)
+ * @param integer    propability for generating a tile (ms)
  * @param integer    interval of generating new tile (ms)
  *
  */
-var Board = function (size, lifeTime, interval) {
+var Board = function (size, probability, interval) {
   this.size = size;
-  this.lifeTime = lifeTime;
+  this.probability = probability;
   this.interval = interval;
   this.startTime = Date.now();
   this.clickTimes = 0;
@@ -45,7 +55,7 @@ var Board = function (size, lifeTime, interval) {
       if (this.cells[i] === undefined) {
         this.cells[i] = [];
       }
-      this.cells[i][j] = new Cell(this.lifeTime, this.interval);
+      this.cells[i][j] = new Cell(this.probability, this.interval);
     }
   }
 

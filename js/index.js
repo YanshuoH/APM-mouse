@@ -15,14 +15,17 @@ var WrapperView = React.createClass({
     return {
       'normal': {
         size: 5,
-        interval: 2000
+        probability: 0.3,
+        interval: 3000
       },
       'hard': {
         size: 4,
-        interval: 2000
+        probability: 0.45,
+        interval: 2500
       },
       'wtf?': {
         size: 3,
+        probability: 0.6,
         interval: 2000
       }
     }
@@ -59,7 +62,7 @@ var NavView = React.createClass({
 var BoardView = React.createClass({
   getInitialState: function (isFirst, duration) {
     var initialState = {
-      board: new Board(3, 1000, 2000),
+      board: new Board(3, 0.6, 2000),
       showOverlay: true,
       endGame: true,
       startTime: Date.now()
@@ -73,7 +76,7 @@ var BoardView = React.createClass({
 
   startGame: function (overlay) {
     this.setState({
-      board: new Board(this.props.difficulty.size, 1000, this.props.difficulty.interval),
+      board: new Board(this.props.difficulty.size, this.props.difficulty.probability, this.props.difficulty.interval),
       totalClick: 0,
       effectiveClick: 0,
       showOverlay: false,
@@ -97,7 +100,6 @@ var BoardView = React.createClass({
   },
 
   handleCellGenerate: function (cell) {
-    // TODO: check if board's cells have all tiles
     if (this.state.board.checkCells()) {
       this.handleGameOver();
 
@@ -110,7 +112,7 @@ var BoardView = React.createClass({
     var self = this;
     var difficulty = this.props.difficulty;
 
-    self.state.board = new Board(difficulty.size, 1000, difficulty.interval);
+    self.state.board = new Board(difficulty.size, difficulty.probability, difficulty.interval);
 
     var cells = self.state.board.cells.map(function (row, index) {
       var className = 'row';
@@ -184,7 +186,8 @@ var CellView = React.createClass({
         self.props.tile.setShow();
         self.setState({ tile: self.props.tile });
       }
-    }, self.props.tile.interval);
+    // interval + random[0, interval] for more taste
+    }, self.props.tile.getRandomInterval());
 
   },
 
@@ -250,8 +253,8 @@ var ScoreBox = React.createClass({
     var effectiveClick = this.props.effectiveClick === undefined ? 0 : this.props.effectiveClick;
 
     return <div className='score-box'>
-      <ScoreCircle percentage={percentage} number={effectiveClick} type={'EPM'} />
-      <ScoreCircle percentage={percentage} number={totalClick} type={'APM'} />
+      <ScoreCircle percentage={percentage} number={effectiveClick} type={'Effective Clicks'} />
+      <ScoreCircle percentage={percentage} number={totalClick} type={'Clicks'} />
       <ScoreCircle percentage={percentage} number={percentage} type={'Percentage'} />
     </div>
   }
@@ -259,7 +262,6 @@ var ScoreBox = React.createClass({
 
 var ScoreCircle = React.createClass({
   render: function () {
-    var cs = React.addons.classSet;
     var className = 'c100 dark ' + 'p' + this.props.percentage;
     // a little bit more concat of class
     if (this.props.percentage > 60) {
@@ -270,7 +272,7 @@ var ScoreCircle = React.createClass({
       className += ' orange';
     }
 
-    var typeClassName = 'type ' + this.props.type;
+    var typeClassName = 'type ' + this.props.type.split(' ').join('-');
     var number = this.props.number;
     if (this.props.type === 'Percentage') {
       number += '%'

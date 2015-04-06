@@ -66,14 +66,14 @@ body{
   .cell {
     @extend .cell-model;
     width: 88px;
-    height: 88px;
+    height: 86px;
     background-color: #181818;
   }
 
   .tile {
     @extend .cell-model;
     width: 88px;
-    height: 88px;
+    height: 86px;
   }
 }
 
@@ -165,7 +165,7 @@ b-color {
 
 .overlay {
   position: absolute;
-  top: 230px;
+  top: 231px;
   width: 490px;
   height: 490px;
   background-color: rgba(221, 221, 221, 0.5);
@@ -237,6 +237,14 @@ b-color {
 
 .c100 span.type.Percentage {
   left: 22px;
+}
+
+.c100 span.type.Effective-Clicks {
+  left: 6px;
+}
+
+.c100 span.type.Clicks {
+  left: 39px;
 }
 
 .sidebar {
