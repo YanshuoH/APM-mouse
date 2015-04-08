@@ -2,7 +2,7 @@
 
 Ever heard of APM (actions per minute) and EPM (effective actions per minute) in Warcraft and Starcraft? 
 
-For the good old times's sake, here's some practice in seconds
+For the good old times' sake, here's some practice in seconds
 
 Enjoy: http://yanshuoh.github.io/APM-mouse/
 
