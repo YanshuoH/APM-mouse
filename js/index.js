@@ -16,17 +16,17 @@ var WrapperView = React.createClass({
       'normal': {
         size: 5,
         probability: 0.3,
-        interval: 3000
+        interval: 5000
       },
       'hard': {
         size: 4,
         probability: 0.45,
-        interval: 2500
+        interval: 4000
       },
       'wtf?': {
         size: 3,
         probability: 0.6,
-        interval: 2000
+        interval: 3000
       }
     }
   },
@@ -165,6 +165,7 @@ var CellView = React.createClass({
   },
 
   // Core function for tiles generation and callbacks to board
+  // All is asynchro
   handleLifeCycle: function () {
     var self = this;
     // Generate tiles by input interval of board
@@ -173,7 +174,7 @@ var CellView = React.createClass({
       // Callback function in board, check if the game is over
       // Game Ends HERE
       if (self.props.onCellGenerate(self.props.tile)) {
-        // Shitty loop to clear all interval...sorry about that
+        // Shitty loop to clear all interval...sorry about this mess
         for (var i = 1; i < 99999; i++) {
           window.clearInterval(i);
         }
@@ -181,11 +182,17 @@ var CellView = React.createClass({
       }
 
       // Random generation in certain interval
-      if (self.props.tile.getRandomBoolean()) {
+      if (self.props.tile.getRandomBoolean() && !self.props.tile.hasShown()) {
         // show tile and update the rendering
         self.props.tile.setShow();
         self.setState({ tile: self.props.tile });
+        // Set disappear
+        setTimeout(function () {
+          self.props.tile.setHide();
+          self.setState({ tile: self.props.tile });
+        }, self.props.tile.interval);
       }
+
     // interval + random[0, interval] for more taste
     }, self.props.tile.getRandomInterval());
 
@@ -228,7 +235,6 @@ var Overlay = React.createClass({
 
     if (boardState.isFirst !== undefined && boardState.isFirst === false) {
       wording = 'Time: ' + boardState.duration + 's';
-      console.log((boardState.effectiveClick / boardState.duration));
       subWording = ((boardState.effectiveClick / boardState.duration) * 60).toFixed(2) + ' EPM - '
       subWording += ((boardState.totalClick / boardState.duration) * 60).toFixed(2) + ' APM';
       buttonWording = 'Retry';

@@ -7,7 +7,6 @@ var Cell = function (propability, interval) {
 }
 
 Cell.prototype.getRandomBoolean = function () {
-  console.log(this.propability);
    return Math.random() >= this.propability;
 }
 
