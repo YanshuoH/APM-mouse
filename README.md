@@ -32,4 +32,11 @@ IE 8 failed. (Seems like ReactJS does not like IE8)
 * In comming responsive support for tablets.
 * and so on
 
+## IOS issues
+Since execution of JS in IOS is weired...It doesn't work well in IOS devices.
+Quote in [skroll](https://github.com/Prinzhorn/skrollr)
+
+> Mobile browsers try to save battery wherever they can. That's why mobile browsers delay the execution of JavaScript while you are scrolling. iOS in particular does this very aggressively and completely stops JavaScript. In short, that's the reason why many scrolling libraries either don't work on mobile devices or they come with their own scrollbar which is a usability nightmare on desktop.
+
+
 ISC Licence
